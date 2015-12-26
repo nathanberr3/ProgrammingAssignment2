@@ -1,15 +1,32 @@
-## Put comments here that give an overall description of what your
-## functions do
+## makeCacheMatrix creates special matrix that can be cached with 2nd function
 
-## Write a short comment describing this function
+## makeCacheMatrix contains 4 functions, getmatrix, setmatrix, getinv, and setinv
+## these functions perform simple cacheing operations
 
 makeCacheMatrix <- function(x = matrix()) {
-
+  i <<- NULL
+  setmatrix <- function (y){
+    x <<- y
+    i <<- NULL
+  }
+  getmatrix <- function() x
+  setinv <- function (inv) i <<- inv
+  getinv <- function () i
+  list(setmatrix=setmatrix, getmatrix=getmatrix, setinv=setinv, getinv=getinv)
 }
 
-
-## Write a short comment describing this function
+## this function will find cache or solve if none available
+##arguments must have been put through makeCacheMatrix function first
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+  i <- x$getinv()
+  if(!is.null(i)){
+    message("getting cached data")
+    return(i)
+  }
+  data <- x$getmatrix()
+  i <- solve(data, ...)
+  x$setinv(i)
+  i
 }
+
